@@ -37,6 +37,11 @@ func PlayBlackJack(name1 string, name2 string, cardDeck []Card) Game {
 	for len(winner) == 0 {
 
 		// Initial Blackjack checks
+		if player1.Value == 21 && player2.Value == 21 {
+			winner = "Draw"
+			break
+		}
+
 		if player1.Value == 21 {
 			winner = player1.Name
 			break
@@ -45,7 +50,7 @@ func PlayBlackJack(name1 string, name2 string, cardDeck []Card) Game {
 		if player2.Value == 21 {
 			winner = player2.Name
 			break
-		} // TODO: Consider blackjack-draw at first?
+		}
 
 		// Player 1 draw cards
 		for player1.Value < 17 {
