@@ -52,7 +52,7 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2021-02-01' = {
 resource functionApp 'Microsoft.Web/sites@2021-02-01' = {
   name: appName
   location: location
-  kind: 'functionapp, linux'
+  kind: 'functionapp,linux'
   properties: {
     httpsOnly: true
     serverFarmId: hostingPlan.id
