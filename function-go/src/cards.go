@@ -69,6 +69,6 @@ func downloadCards(uri string) []Card {
 
 func drawCardsFromTop(cards []Card, number int) ([]Card, []Card) {
 	res1 := cards[0:number]
-	res2 := cards[number:(len(cards))]
+	res2 := cards[number:]
 	return res1, res2
 }

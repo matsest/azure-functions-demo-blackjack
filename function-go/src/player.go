@@ -1,17 +1,9 @@
 package main
 
-import "fmt"
-
 type Player struct {
 	Name  string
 	Hand  []Card
 	Value int
-}
-
-func (player Player) printCards() {
-	cards := player.Hand
-	arr := abbreviateCards(cards[:]...)
-	fmt.Println(player.Name, arr, player.Value)
 }
 
 func (player *Player) drawCards(cards *[]Card, number int) {
