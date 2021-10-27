@@ -37,6 +37,7 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-06-01' = {
       }
     }
   }
+  tags: tags
 }
 
 resource hostingPlan 'Microsoft.Web/serverfarms@2021-02-01' = {
@@ -96,4 +97,5 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
     publicNetworkAccessForIngestion: 'Enabled'
     publicNetworkAccessForQuery: 'Enabled'
   }
+  tags: tags
 }
