@@ -41,7 +41,7 @@ jobs:
       - name: "Deploy Azure Resources"
         uses: azure/arm-deploy@v1
         with:
-          deploymentName: azfunc-${{ env.GITHUB_RUN_ID }}
+          deploymentName: "azfunc${{ env.GITHUB_RUN_ID }}"
           resourceGroupName: mxe21
           template: ./bicep/main.bicep
           parameters: ./bicep/main.parameters.json

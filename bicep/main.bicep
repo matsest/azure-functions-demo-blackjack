@@ -85,7 +85,7 @@ resource functionApp 'Microsoft.Web/sites@2021-02-01' = {
 }
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
-  name: '${appName}-appInsights'
+  name: appName
   location: location
   kind: 'web'
   properties: {
