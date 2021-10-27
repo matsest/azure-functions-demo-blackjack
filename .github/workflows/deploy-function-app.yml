@@ -1,5 +1,3 @@
-#https://github.com/Azure/functions-action
-
 name: Deploy Function App
 
 on:
@@ -9,6 +7,8 @@ on:
       - main
     paths:
       - "**.go"
+      - "bicep/**"
+      - "function-go/**"
   workflow_dispatch:
 
 ## TODO: deploy azure resources with bicep
@@ -35,9 +35,10 @@ jobs:
         run: go build -ldflags="-s -w" -o main .
         working-directory: function-go/src
 
-      - name: Azure Login
-        shell: pwsh
-        run: scripts/azure-login.ps1 -ServicePrincipalJson "${{ secrets.AZURE_CREDENTIALS }}"
+      - name: "Login"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: "Run Azure Functions Action"
         uses: Azure/functions-action@v1
