@@ -82,12 +82,18 @@ go build -o main .
 Run the function:
 
 ```bash
+## Test the package and packaged function using Azure Functions Core Tools
 cd function-go
 func start                        # in one terminal
 curl localhost:7071/api/blackjack # in another terminal
+
+## Alternatively run the binary without using Azure Functions Core Tools (to quickly test the go package)
+cd function-go
+./main                            # in one terminal
+curl localhost:8081/api/blackjack # in another terminal
 ```
 
-Follow the guide for a more descriptive guide.
+Follow the [guide](https://docs.microsoft.com/en-us/azure/azure-functions/create-first-function-vs-code-other?tabs=go%2Clinux) for a more descriptive guide.
 
 #### Run the deployed function
 
