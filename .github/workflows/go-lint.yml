@@ -12,6 +12,7 @@ on:
       - main
     paths:
       - "**.go"
+  workflow_dispatch:
 
 jobs:
   golangci:
