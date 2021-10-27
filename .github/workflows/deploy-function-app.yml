@@ -35,10 +35,13 @@ jobs:
         run: go build -ldflags="-s -w" -o main .
         working-directory: function-go/src
 
+      - name: Azure Login
+        shell: pwsh
+        run: scripts/azure-login.ps1 -ServicePrincipalJson "${{ secrets.AZURE_CREDENTIALS }}"
+
       - name: "Run Azure Functions Action"
         uses: Azure/functions-action@v1
         id: fa
         with:
           app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
