@@ -11,8 +11,6 @@ on:
       - "function-go/**"
   workflow_dispatch:
 
-## TODO: deploy azure resources with bicep
-
 env:
   AZURE_FUNCTIONAPP_NAME: mxe21v2
   AZURE_FUNCTIONAPP_PACKAGE_PATH: "./function-go"
@@ -40,7 +38,15 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: "Run Azure Functions Action"
+      - name: "Deploy Azure Resources"
+        uses: azure/arm-deploy@v1
+        with:
+          deploymentName: azfunc-${{ env.GITHUB_RUN_ID }}
+          resourceGroupName: mxe21
+          template: ./bicep/main.bicep
+          parameters: ./bicep/main.parameters.json
+
+      - name: "Deploy Functions"
         uses: Azure/functions-action@v1
         id: fa
         with:
