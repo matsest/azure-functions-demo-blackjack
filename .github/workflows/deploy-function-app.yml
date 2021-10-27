@@ -14,6 +14,8 @@ on:
 env:
   AZURE_FUNCTIONAPP_NAME: mxe21v2
   AZURE_FUNCTIONAPP_PACKAGE_PATH: "./function-go"
+  DEPLOYMENTNAME: "azfunc-${{ github.run_id }}"
+  RESOURCEGROUPNAME: "mxe21"
   GO_VERSION: "1.16"
 
 jobs:
@@ -41,8 +43,8 @@ jobs:
       - name: "Deploy Azure Resources"
         uses: azure/arm-deploy@v1
         with:
-          deploymentName: "azfunc${{ env.GITHUB_RUN_ID }}"
-          resourceGroupName: mxe21
+          deploymentName: ${{ env.DEPLOYMENTNAME  }}
+          resourceGroupName: ${{ env.RESOURCEGROUPNAME }}
           template: ./bicep/main.bicep
           parameters: ./bicep/main.parameters.json
 
