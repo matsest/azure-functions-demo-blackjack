@@ -1,5 +1,7 @@
 # Azure Functions Demo
 
+[![Deploy](https://github.com/matsest/azure-functions-demo/actions/workflows/deploy-function-app.yml/badge.svg)](https://github.com/matsest/azure-functions-demo/actions/workflows/deploy-function-app.yml)
+
 This repo contains code to deploy an Azure Function in a declarative fashion. The following tools are used:
 
 - :gear: [GitHub Actions Workflow](https://docs.github.com/en/actions/quickstart): End-to-end deployment and build of all components
