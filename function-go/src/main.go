@@ -13,7 +13,6 @@ type Game struct {
 	Winner  string
 }
 
-//func PlayBlackJack(name1 string, name2 string, cardDeck []Card) (winner string, player1 *Player, player2 *Player) {
 func PlayBlackJack(name1 string, name2 string, cardDeck []Card) Game {
 
 	var cards []Card = cardDeck
@@ -21,7 +20,6 @@ func PlayBlackJack(name1 string, name2 string, cardDeck []Card) Game {
 	p1 := newPlayer(name1)
 	p1.drawCards(&cards, 2)
 
-	// Magnus
 	p2 := newPlayer(name2)
 	p2.drawCards(&cards, 2)
 
