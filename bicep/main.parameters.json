@@ -11,6 +11,9 @@
         "appName": {
             "value": "mxe21v2"
         },
+        "appInsightsName": {
+            "value": "mxe21"
+        },
         "location": {
             "value": "norwayeast"
         },

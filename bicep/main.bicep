@@ -1,6 +1,8 @@
 param storageAccountName string
 param hostingPlanName string
 param appName string
+
+param appInsightsName string = appName
 param location string = resourceGroup().location
 param tags object = {}
 
@@ -85,7 +87,7 @@ resource functionApp 'Microsoft.Web/sites@2021-02-01' = {
 }
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
-  name: appName
+  name: appInsightsName
   location: location
   kind: 'web'
   properties: {
