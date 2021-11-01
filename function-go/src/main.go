@@ -88,7 +88,7 @@ func play(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "cards: ", abbreviateCards(cards[:]...), "\n")
 	fmt.Fprint(w, "points: ", cardsValues(cards[:]...), "\n")
 
-	game := PlayBlackJack("Mats", "Magnus", cards)
+	game := PlayBlackJack("Mats", "Knut", cards)
 	for i := 0; i < len(game.Players); i++ {
 		fmt.Fprintf(w, "%s: %v Sum: %d \n", game.Players[i].Name, abbreviateCards(game.Players[i].Hand...), game.Players[i].Value)
 	}
