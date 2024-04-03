@@ -13,11 +13,15 @@ type Card struct {
 	Value string
 }
 
+type Cards struct {
+    Cards []Card
+}
+
 func cardValue(card Card) int {
 	switch card.Value {
-	case "J", "Q", "K":
+	case "JACK", "QUEEN", "KING":
 		return 10
-	case "A":
+	case "ACE":
 		return 11
 	}
 	res, err := strconv.Atoi(card.Value)
@@ -31,7 +35,7 @@ func cardValue(card Card) int {
 func abbreviateCards(cards ...Card) []string {
 	arr := []string{}
 	for i := 0; i < len(cards); i++ {
-		arr = append(arr, string(cards[i].Suit[0:1]+cards[i].Value))
+        arr = append(arr, string(cards[i].Suit[0:1]+cards[i].Value[0:1]))
 	}
 	return arr
 }
@@ -58,11 +62,19 @@ func downloadCards(uri string) []Card {
 		log.Fatalln(err)
 	}
 
-	var cards []Card
-	err = json.Unmarshal([]byte(body), &cards)
+	var cardsResponse Cards
+	err = json.Unmarshal([]byte(body), &cardsResponse)
 	if err != nil {
 		log.Fatalln(err)
 	}
+
+    var cards []Card
+    for _, card := range cardsResponse.Cards {
+        cards = append(cards, Card{
+            Value: card.Value,
+            Suit:  card.Suit,
+        })
+    }
 
 	return cards
 }

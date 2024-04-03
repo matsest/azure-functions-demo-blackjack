@@ -83,7 +83,7 @@ func PlayBlackJack(name1 string, name2 string, cardDeck []Card) Game {
 
 func play(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
-	cards := downloadCards("http://nav-deckofcards.herokuapp.com/shuffle")
+    cards := downloadCards("https://deckofcardsapi.com/api/deck/new/draw/?count=52")
 
 	fmt.Fprint(w, "cards: ", abbreviateCards(cards[:]...), "\n")
 	fmt.Fprint(w, "points: ", cardsValues(cards[:]...), "\n")

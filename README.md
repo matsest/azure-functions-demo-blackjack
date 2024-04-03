@@ -92,7 +92,7 @@ curl localhost:7071/api/blackjack # in another terminal
 ## Alternatively run the binary without using Azure Functions Core Tools (to quickly test the go package)
 cd function-go
 ./main                            # in one terminal
-curl localhost:8081/api/blackjack # in another terminal
+curl localhost:8080/api/blackjack # in another terminal
 ```
 
 Follow the [guide](https://docs.microsoft.com/en-us/azure/azure-functions/create-first-function-vs-code-other?tabs=go%2Clinux) for a more descriptive guide.
