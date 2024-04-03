@@ -1,5 +1,9 @@
 name: Deploy Function App
 
+permissions:
+      id-token: write
+      contents: read
+
 on:
   push:
     branches:
@@ -16,7 +20,7 @@ env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: "./function-go"
   DEPLOYMENTNAME: "azfunc-${{ github.run_id }}"
   RESOURCEGROUPNAME: "mxe21"
-  GO_VERSION: "1.16"
+  GO_VERSION: "1.22"
 
 jobs:
   build-and-deploy:
@@ -38,11 +42,14 @@ jobs:
       - name: "Login"
         uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: "Deploy Azure Resources"
         uses: azure/arm-deploy@v2
         with:
+          scope: 'resourceGroup'
           deploymentName: ${{ env.DEPLOYMENTNAME  }}
           resourceGroupName: ${{ env.RESOURCEGROUPNAME }}
           template: ./bicep/main.bicep
