@@ -36,7 +36,9 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2023-01-01' = {
     tier: 'Dynamic'
   }
   kind: 'functionapp'
-  properties: {}
+  properties: {
+    reserved: true // to set as linux app service
+  }
   tags: tags
 }
 
