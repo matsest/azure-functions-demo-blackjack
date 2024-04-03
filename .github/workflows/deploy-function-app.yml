@@ -20,7 +20,7 @@ env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: "./function-go"
   DEPLOYMENTNAME: "azfunc-${{ github.run_id }}"
   RESOURCEGROUPNAME: "mxe21"
-  GO_VERSION: "1.19"
+  GO_VERSION: "1.19" # Azure functions does not support newer as of now
 
 jobs:
   build-and-deploy:
