@@ -105,6 +105,6 @@ func main() {
 		listenAddr = ":" + val
 	}
 	http.HandleFunc("/api/blackjack", play)
-	log.Printf("About to listen on %s. Go to https://127.0.0.1%s/", listenAddr, listenAddr)
+    log.Printf("About to listen on port %s. Go to http://127.0.0.1%s/api/blackjack", listenAddr, listenAddr)
 	log.Fatal(http.ListenAndServe(listenAddr, nil))
 }
