@@ -39,7 +39,7 @@ SUBID="$(az account show -o tsv --query id)"
 
 $ az group create -l $LOCATION -n $RESOURCEGROUP
 
-$ az ad sp create-for-rbac --name $APPNAME --role contributor --scopes "/subscriptions/$SUBID/resourceGroups/$RESOURCEGROUP"
+$ az ad sp create-for-rbac --name $APPNAME --role contributor --scopes "/subscriptions/$SUBID/resourceGroups/$RESOURCEGROUP" --sdk-auth
 
 # The command should output a JSON object similar to this:
 
@@ -67,6 +67,8 @@ Deployment of Azure resources for Azure Functions is based on the guide found [h
 To develop with Bicep install the [necessary tooling](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/install) (VS Code Extension, Bicep CLI).
 
 Remember to edit the [parameter file](./bicep/main.parameters.json) before deploying.
+
+If you want to fork this repository you also may need to alter the [workflow file](./.github/workflows/deploy-function-app.yml).
 
 ### Functions
 
