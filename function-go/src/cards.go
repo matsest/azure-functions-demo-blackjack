@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"strconv"
@@ -14,7 +14,7 @@ type Card struct {
 }
 
 type CardsResp struct {
-    Cards []Card
+	Cards []Card
 }
 
 func cardValue(card Card) int {
@@ -35,13 +35,13 @@ func cardValue(card Card) int {
 func abbreviateCards(cards ...Card) []string {
 	arr := []string{}
 	for i := 0; i < len(cards); i++ {
-        var valToAdd string
-        if len(cards[i].Value) > 2 {
-            valToAdd = string(cards[i].Value[0])
-        } else {
-            valToAdd = string(cards[i].Value)
-        }
-        arr = append(arr, string(cards[i].Suit[0:1])+valToAdd)
+		var valToAdd string
+		if len(cards[i].Value) > 2 {
+			valToAdd = string(cards[i].Value[0])
+		} else {
+			valToAdd = string(cards[i].Value)
+		}
+		arr = append(arr, string(cards[i].Suit[0:1])+valToAdd)
 	}
 	return arr
 }
@@ -63,7 +63,7 @@ func downloadCards(uri string) []Card {
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -74,13 +74,13 @@ func downloadCards(uri string) []Card {
 		log.Fatalln(err)
 	}
 
-    var cards []Card
-    for _, card := range cardsResponse.Cards {
-        cards = append(cards, Card{
-            Value: card.Value,
-            Suit:  card.Suit,
-        })
-    }
+	var cards []Card
+	for _, card := range cardsResponse.Cards {
+		cards = append(cards, Card{
+			Value: card.Value,
+			Suit:  card.Suit,
+		})
+	}
 
 	return cards
 }
