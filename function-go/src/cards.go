@@ -13,7 +13,7 @@ type Card struct {
 	Value string
 }
 
-type Cards struct {
+type CardsResp struct {
     Cards []Card
 }
 
@@ -35,7 +35,13 @@ func cardValue(card Card) int {
 func abbreviateCards(cards ...Card) []string {
 	arr := []string{}
 	for i := 0; i < len(cards); i++ {
-        arr = append(arr, string(cards[i].Suit[0:1]+cards[i].Value[0:1]))
+        var valToAdd string
+        if len(cards[i].Value) > 2 {
+            valToAdd = string(cards[i].Value[0])
+        } else {
+            valToAdd = string(cards[i].Value)
+        }
+        arr = append(arr, string(cards[i].Suit[0:1])+valToAdd)
 	}
 	return arr
 }
@@ -62,7 +68,7 @@ func downloadCards(uri string) []Card {
 		log.Fatalln(err)
 	}
 
-	var cardsResponse Cards
+	var cardsResponse CardsResp
 	err = json.Unmarshal([]byte(body), &cardsResponse)
 	if err != nil {
 		log.Fatalln(err)
