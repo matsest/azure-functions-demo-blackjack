@@ -86,6 +86,11 @@ resource functionApp 'Microsoft.Web/sites@2023-01-01' = {
   tags: tags
 }
 
+resource workspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
+  name: appInsightsName
+  location: location
+}
+
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: appInsightsName
   location: location
@@ -93,6 +98,8 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   properties: {
     Application_Type: 'web'
     Request_Source: 'rest'
+    WorkspaceResourceId: workspace.id
+    IngestionMode: 'LogAnalytics'
   }
   tags: tags
 }
