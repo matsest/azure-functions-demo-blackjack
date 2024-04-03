@@ -23,10 +23,13 @@ Winner: Mats
 
 ## Requirements
 
-- An Azure subscription with a resource group deployed
+- An Azure subscription with Contributor permissions
+- [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) installed
+- [Go 1.19](https://go.dev/doc/install) installed - note that newer versions of Go currently is incompatible with Function apps
 - A service principal/managed identity with Contributor permissions to the resource group
   - Configured OIDC federated credentials
   - Secrets added to the repository for `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`
+- Optional: [Azure Functions Core Tools](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=linux%2Cisolated-process%2Cnode-v4%2Cpython-v2%2Chttp-trigger%2Ccontainer-apps&pivots=programming-language-typescript#install-the-azure-functions-core-tools) and [VS Code](https://code.visualstudio.com/) with [Azure Functions extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions).
 
 <details>
 
@@ -82,10 +85,6 @@ Deployment of Azure resources for Azure Functions is based on the guide found [h
 
 To develop with Bicep install the [necessary tooling](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/install) (VS Code Extension, Bicep CLI).
 
-Remember to edit the [parameter file](./bicep/main.parameters.json) before deploying.
-
-If you want to fork this repository you also may need to alter the [workflow file](./.github/workflows/deploy-function-app.yml).
-
 ### Functions
 
 To develop the function, open the [function directory](./function-go) as a workspace in VS Code. This allows to use the Functions extensions to work on a local project.
@@ -116,6 +115,40 @@ curl localhost:8080/api/blackjack # in another terminal
 ```
 
 Follow the [guide](https://docs.microsoft.com/en-us/azure/azure-functions/create-first-function-vs-code-other?tabs=go%2Clinux) for a more descriptive guide.
+
+## Deployment
+
+The infrastructure necessary to deploy the function is contained in the [bicep file](./bicep/main.bicep) with [parameters](./bicep/main.parameters.json). Remember to edit the [parameter file](./bicep/main.parameters.json) before deploying this.
+
+## Deploy from CLI
+
+To deploy the infrastructure from your local machine you can run
+
+```bash
+$ az group deployment create -g $RESOURCEGROUP -f ./bicep/main.bicep -p @./bicep/main.parameters.json
+```
+
+To deploy the function you can run
+
+```bash
+$ cd function-go
+$ func azure functionapp publish $APPNAME
+```
+
+### Deployment via GitHub Actions
+
+Deployment via GitHub Actions will give you end-to-end deployment of both the infrastructure and function.
+
+If you want to fork this repository you also may need to alter the [workflow file](./.github/workflows/deploy-function-app.yml) to match your resource group and function app names:
+
+```yaml
+
+env:
+  DEPLOYMENTNAME: "azfunc-${{ github.run_id }}"
+  RESOURCEGROUPNAME: "mxe21"
+  AZURE_FUNCTIONAPP_NAME: mxe21v2
+
+```
 
 #### Run the deployed function
 
