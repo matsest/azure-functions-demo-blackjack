@@ -25,6 +25,7 @@ Winner: Mats
 
 - An Azure subscription with a resource group deployed
 - A service principal/managed identity with Contributor permissions to the resource group
+  - Configured OIDC federated credentials
   - Secrets added to the repository for `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`
 
 <details>
@@ -54,6 +55,21 @@ $ az ad sp create-for-rbac --name $APPNAME --role contributor --scopes "/subscri
 #  - AZURE_CLIENT_ID
 #  - AZURE_TENANT_ID
 #  - AZURE_SUBSCRIPTION_ID
+
+# Configure OIDC federated credentials - read more https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-portal%2Cwindows#use-the-azure-login-action-with-openid-connect
+$ az ad app federated-credential create --id $APP_OBJECT_ID --parameters credential.json
+
+# ("credential.json" contains the following content)
+# {
+#     "name": "github",
+#     "issuer": "https://token.actions.githubusercontent.com",
+#     "subject": "repo:matsest/azure-functions-demo-blackjack:environment:dev",
+#     "description": "Deploy to Azure",
+#     "audiences": [
+#         "api://AzureADTokenExchange"
+#     ]
+# }
+
 ```
 
 </details>
