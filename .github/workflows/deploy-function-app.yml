@@ -40,7 +40,7 @@ jobs:
       - name: "Deploy Azure Resources"
         uses: azure/arm-deploy@v2
         with:
-          scope: 'resourceGroup'
+          scope: 'resourcegroup'
           deploymentName: ${{ env.DEPLOYMENTNAME  }}
           resourceGroupName: ${{ env.RESOURCEGROUPNAME }}
           template: ./bicep/main.bicep
