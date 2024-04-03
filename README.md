@@ -24,34 +24,36 @@ Winner: Mats
 ## Requirements
 
 - An Azure subscription with a resource group deployed
-- A service principal with Contributor permissions to the resource group
-  - Add credentials as repository secrets to `AZURE_CREDENTIALS`
+- A service principal/managed identity with Contributor permissions to the resource group
+  - Secrets added to the repository for `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`
 
 <details>
 
 ```bash
-# Set up az cli: https://docs.microsoft.com/en-us/cli/azure/get-started-with-azure-cli
+# Set up az cli and log in: https://docs.microsoft.com/en-us/cli/azure/get-started-with-azure-cli
 
-$ az group create -l {location} -n {resource group}
+LOCATION=norwayeast
+RESOURCERGOUP=az-func-demo
+APPNAME=az-func-demo-sp
+SUBID="$(az account show -o tsv --query id)"
 
-$ az ad sp create-for-rbac --name "myApp" --role contributor \
-                         --scopes /subscriptions/{subscription-id}/resourceGroups/{resource-group}
-                         --sdk-auth
+$ az group create -l $LOCATION -n $RESOURCEGROUP
 
-# Replace {subscription-id}, {resource-group}, and {app-name} with
-# the names of your subscription, resource group, and Azure function app.
+$ az ad sp create-for-rbac --name $APPNAME --role contributor --scopes "/subscriptions/$SUBID/resourceGroups/$RESOURCEGROUP"
 
 # The command should output a JSON object similar to this:
 
 {
   "clientId": "<GUID>",
-  "clientSecret": "<GUID>",
   "subscriptionId": "<GUID>",
   "tenantId": "<GUID>",
   (...)
 }
 
-# Copy this and add as a repository secret named AZURE_CREDENTIALS
+# Copy these values and add as a repository secrets:
+#  - AZURE_CLIENT_ID
+#  - AZURE_TENANT_ID
+#  - AZURE_SUBSCRIPTION_ID
 ```
 
 </details>
