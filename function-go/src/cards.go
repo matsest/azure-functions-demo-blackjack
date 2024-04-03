@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"strconv"
@@ -13,11 +13,15 @@ type Card struct {
 	Value string
 }
 
+type CardsResp struct {
+	Cards []Card
+}
+
 func cardValue(card Card) int {
 	switch card.Value {
-	case "J", "Q", "K":
+	case "JACK", "QUEEN", "KING":
 		return 10
-	case "A":
+	case "ACE":
 		return 11
 	}
 	res, err := strconv.Atoi(card.Value)
@@ -31,7 +35,13 @@ func cardValue(card Card) int {
 func abbreviateCards(cards ...Card) []string {
 	arr := []string{}
 	for i := 0; i < len(cards); i++ {
-		arr = append(arr, string(cards[i].Suit[0:1]+cards[i].Value))
+		var valToAdd string
+		if len(cards[i].Value) > 2 {
+			valToAdd = string(cards[i].Value[0])
+		} else {
+			valToAdd = string(cards[i].Value)
+		}
+		arr = append(arr, string(cards[i].Suit[0:1])+valToAdd)
 	}
 	return arr
 }
@@ -53,15 +63,23 @@ func downloadCards(uri string) []Card {
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	var cardsResponse CardsResp
+	err = json.Unmarshal([]byte(body), &cardsResponse)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	var cards []Card
-	err = json.Unmarshal([]byte(body), &cards)
-	if err != nil {
-		log.Fatalln(err)
+	for _, card := range cardsResponse.Cards {
+		cards = append(cards, Card{
+			Value: card.Value,
+			Suit:  card.Suit,
+		})
 	}
 
 	return cards

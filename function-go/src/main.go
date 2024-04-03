@@ -83,7 +83,7 @@ func PlayBlackJack(name1 string, name2 string, cardDeck []Card) Game {
 
 func play(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
-	cards := downloadCards("http://nav-deckofcards.herokuapp.com/shuffle")
+    cards := downloadCards("https://deckofcardsapi.com/api/deck/new/draw/?count=52")
 
 	fmt.Fprint(w, "cards: ", abbreviateCards(cards[:]...), "\n")
 	fmt.Fprint(w, "points: ", cardsValues(cards[:]...), "\n")
@@ -105,6 +105,6 @@ func main() {
 		listenAddr = ":" + val
 	}
 	http.HandleFunc("/api/blackjack", play)
-	log.Printf("About to listen on %s. Go to https://127.0.0.1%s/", listenAddr, listenAddr)
+    log.Printf("About to listen on port %s. Go to http://127.0.0.1%s/api/blackjack", listenAddr, listenAddr)
 	log.Fatal(http.ListenAndServe(listenAddr, nil))
 }

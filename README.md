@@ -24,34 +24,36 @@ Winner: Mats
 ## Requirements
 
 - An Azure subscription with a resource group deployed
-- A service principal with Contributor permissions to the resource group
-  - Add credentials as repository secrets to `AZURE_CREDENTIALS`
+- A service principal/managed identity with Contributor permissions to the resource group
+  - Secrets added to the repository for `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`
 
 <details>
 
 ```bash
-# Set up az cli: https://docs.microsoft.com/en-us/cli/azure/get-started-with-azure-cli
+# Set up az cli and log in: https://docs.microsoft.com/en-us/cli/azure/get-started-with-azure-cli
 
-$ az group create -l {location} -n {resource group}
+LOCATION=norwayeast
+RESOURCERGOUP=az-func-demo
+APPNAME=az-func-demo-sp
+SUBID="$(az account show -o tsv --query id)"
 
-$ az ad sp create-for-rbac --name "myApp" --role contributor \
-                         --scopes /subscriptions/{subscription-id}/resourceGroups/{resource-group}
-                         --sdk-auth
+$ az group create -l $LOCATION -n $RESOURCEGROUP
 
-# Replace {subscription-id}, {resource-group}, and {app-name} with
-# the names of your subscription, resource group, and Azure function app.
+$ az ad sp create-for-rbac --name $APPNAME --role contributor --scopes "/subscriptions/$SUBID/resourceGroups/$RESOURCEGROUP" --sdk-auth
 
 # The command should output a JSON object similar to this:
 
 {
   "clientId": "<GUID>",
-  "clientSecret": "<GUID>",
   "subscriptionId": "<GUID>",
   "tenantId": "<GUID>",
   (...)
 }
 
-# Copy this and add as a repository secret named AZURE_CREDENTIALS
+# Copy these values and add as a repository secrets:
+#  - AZURE_CLIENT_ID
+#  - AZURE_TENANT_ID
+#  - AZURE_SUBSCRIPTION_ID
 ```
 
 </details>
@@ -65,6 +67,8 @@ Deployment of Azure resources for Azure Functions is based on the guide found [h
 To develop with Bicep install the [necessary tooling](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/install) (VS Code Extension, Bicep CLI).
 
 Remember to edit the [parameter file](./bicep/main.parameters.json) before deploying.
+
+If you want to fork this repository you also may need to alter the [workflow file](./.github/workflows/deploy-function-app.yml).
 
 ### Functions
 
@@ -92,7 +96,7 @@ curl localhost:7071/api/blackjack # in another terminal
 ## Alternatively run the binary without using Azure Functions Core Tools (to quickly test the go package)
 cd function-go
 ./main                            # in one terminal
-curl localhost:8081/api/blackjack # in another terminal
+curl localhost:8080/api/blackjack # in another terminal
 ```
 
 Follow the [guide](https://docs.microsoft.com/en-us/azure/azure-functions/create-first-function-vs-code-other?tabs=go%2Clinux) for a more descriptive guide.
